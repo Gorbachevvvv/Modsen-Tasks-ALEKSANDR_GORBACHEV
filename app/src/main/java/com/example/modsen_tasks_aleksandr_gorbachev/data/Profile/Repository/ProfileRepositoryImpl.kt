@@ -1,10 +1,10 @@
 package com.example.modsen_tasks_aleksandr_gorbachev.data.Profile.Repository
 
 import com.example.modsen_tasks_aleksandr_gorbachev.data.Profile.Model.ProfileDataModel
-import com.example.modsen_tasks_aleksandr_gorbachev.data.Profile.Model.ProfileDomainModel
 
 class ProfileRepositoryImpl:ProfileRepository {
-    fun ProfileDataModel.toDomain()= ProfileDomainModel(login,password)
+    fun ProfileDataModel.toDomain()=
+        ProfileDataModel(login,password)
 
     private val profile = listOf(
         ProfileDataModel("sasha","sasha"),

@@ -1,51 +1,39 @@
 package com.example.modsen_tasks_aleksandr_gorbachev.ui.Tasks
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.modsen_tasks_aleksandr_gorbachev.Domain.tasks.Model.TaskDomainModel
+import com.example.modsen_tasks_aleksandr_gorbachev.data.Tasks.Model.TaskDataModel
 import org.koin.androidx.compose.koinViewModel
-
 
 @Composable
 fun TasksListScreen(
     viewModel: TasksListViewModel = koinViewModel(),
-    onNavigate: (TaskDomainModel) -> Unit
+    onNavigate: (TaskDataModel) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
-
     LaunchedEffect(Unit) {
-        viewModel.onIntent(TasksListIntent.LoadTasks)
         viewModel.event.collect { event ->
             when (event) {
                 is TasksListEvent.NavigateToTask -> onNavigate(event.task)
             }
         }
     }
+
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        if (state.isLoading)
-        {
+        if (state.isLoading) {
             CircularProgressIndicator()
         } else {
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(state.tasks) { task: TaskDomainModel ->
+                items(state.tasks) { task: TaskDataModel ->
                     Button(
                         onClick = { viewModel.onIntent(TasksListIntent.ClickTask(task)) },
                         modifier = Modifier.fillMaxWidth()

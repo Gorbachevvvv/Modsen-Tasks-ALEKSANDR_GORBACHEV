@@ -28,20 +28,3 @@ class App : Application() {
         }
     }
 }
-
-@Composable
-fun AppNav(){
-    val navController=rememberNavController()
-    NavHost(
-        navController=navController,
-        startDestination="tasks"
-    ){
-        composable("tasks"){
-            TasksListScreen (onNavigate = {navController.navigate("login")}
-            )
-        }
-        composable("login"){
-            LoginScreen ()
-        }
-    }
-}

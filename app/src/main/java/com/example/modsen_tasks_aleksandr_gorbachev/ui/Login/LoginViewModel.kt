@@ -17,15 +17,15 @@ class LoginViewModel (private val getProfileUseCase: GetProfileUseCase) : ViewMo
     private val _event= SingleFlowEvent<LoginEvent>(viewModelScope)
     val event=_event.flow
 
-    fun onIntent(intent:LoginIntent) {
+    fun onIntent(intent: LoginIntent) {
         when (intent) {
-            is LoginIntent.EnterUsername -> {
-                _state.update {it.copy(login=intent.login)}
+            is EnterUsername -> {
+                _state.update { it.copy(login = intent.login) }
             }
-            is LoginIntent.EnterPassword->{
-                _state.update{it.copy(password=intent.password)}
+            is EnterPassword -> {
+                _state.update { it.copy(password = intent.password) }
             }
-            is LoginIntent.Submit->{
+            is Submit -> {
                 submit()
             }
         }
@@ -40,7 +40,8 @@ class LoginViewModel (private val getProfileUseCase: GetProfileUseCase) : ViewMo
             val result=getProfileUseCase(username,password)
             _state.update{it.copy(isLoading = false)}
             result.fold(
-                onSuccess = {_event.emit(LoginEvent.AuthorizationMessage("Логин и пароль верны"))},
+                onSuccess = {_event.emit(LoginEvent.AuthorizationMessage("Логин и пароль верны"))
+                    _event.emit(LoginEvent.NavigateToNextScreen) },
                 onFailure = {_event.emit(LoginEvent.AuthorizationMessage("Неверный логин или пароль"))}
             )
         }

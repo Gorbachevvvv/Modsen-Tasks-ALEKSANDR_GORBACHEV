@@ -1,0 +1,50 @@
+package com.example.modsen_tasks_aleksandr_gorbachev.ui.Login
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.modsen_tasks_aleksandr_gorbachev.domain.Profile.Usecase.GetProfileUseCase
+import com.example.modsen_tasks_aleksandr_gorbachev.ui.Common.SingleFlowEvent
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+class LoginViewModel (private val getProfileUseCase: GetProfileUseCase) : ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state
+
+    private val _event= SingleFlowEvent<LoginEvent>(viewModelScope)
+    val event=_event.flow
+
+    fun onIntent(intent: LoginIntent) {
+        when (intent) {
+            is EnterUsername -> {
+                _state.update { it.copy(login = intent.login) }
+            }
+            is EnterPassword -> {
+                _state.update { it.copy(password = intent.password) }
+            }
+            is Submit -> {
+                submit()
+            }
+        }
+    }
+    private fun submit(){
+        val username= _state.value.login
+        val password=_state.value.password
+
+        viewModelScope.launch {
+            _state.update{it.copy(isLoading=true)}
+            delay(1000)
+            val result=getProfileUseCase(username,password)
+            _state.update{it.copy(isLoading = false)}
+            result.fold(
+                onSuccess = {_event.emit(LoginEvent.AuthorizationMessage("Логин и пароль верны"))
+                    _event.emit(LoginEvent.NavigateToNextScreen) },
+                onFailure = {_event.emit(LoginEvent.AuthorizationMessage("Неверный логин или пароль"))}
+            )
+        }
+    }
+
+}

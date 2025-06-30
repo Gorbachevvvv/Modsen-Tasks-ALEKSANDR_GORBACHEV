@@ -45,6 +45,25 @@ android {
 }
 
 dependencies {
+    val composeBom = platform("androidx.compose:compose-bom:2025.05.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation(libs.material3)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.foundation)
+    implementation(libs.ui)
+    implementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.tooling)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.ui.test.manifest)
+    implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.adaptive)
+    implementation(libs.activity.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.runtime.rxjava2)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -63,14 +82,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(project.dependencies.platform("io.insert-koin:koin-bom:4.0.3"))
-    implementation("io.insert-koin:koin-core")
-    // Java Compatibility
-    implementation("io.insert-koin:koin-android-compat:4.0.3")
-    // Jetpack WorkManager
-    implementation("io.insert-koin:koin-androidx-workmanager:4.0.3")
-    // Navigation Graph
-    implementation("io.insert-koin:koin-androidx-navigation:4.0.3")
-    implementation("io.insert-koin:koin-androidx-compose:4.0.3")
-
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.koin.core)
+    implementation(libs.koin.android.compat)
+    implementation(libs.koin.androidx.workmanager)
+    implementation(libs.koin.androidx.navigation)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
 }

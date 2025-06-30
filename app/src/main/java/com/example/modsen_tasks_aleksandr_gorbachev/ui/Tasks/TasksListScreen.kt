@@ -9,12 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.modsen_tasks_aleksandr_gorbachev.data.Tasks.Model.TaskDataModel
+import com.example.modsen_tasks_aleksandr_gorbachev.domain.Tasks.Model.TaskDomainModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TasksListScreen(
     viewModel: TasksListViewModel = koinViewModel(),
-    onNavigate: (TaskDataModel) -> Unit
+    onNavigate: (TaskDomainModel) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
@@ -33,7 +34,7 @@ fun TasksListScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(state.tasks) { task: TaskDataModel ->
+                items(state.tasks) { task: TaskDomainModel ->
                     Button(
                         onClick = { viewModel.onIntent(TasksListIntent.ClickTask(task)) },
                         modifier = Modifier.fillMaxWidth()
